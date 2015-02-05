@@ -1,5 +1,9 @@
-VideoManager
+VideoManagerTME
 ============
+###Description
+This is an additional Plugin for the VideoManager Plugin, thus it only works with VideoManager installed (see https://github.com/studer-raimann/VideoManager).
+It allows you to add videos from VideoManager in any Text-Media-Editor.
+
 ###Installation
 Start at your ILIAS root directory
 ```bash
