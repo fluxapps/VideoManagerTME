@@ -26,6 +26,15 @@ class ilVideoManagerTMEPlugin extends ilPageComponentPlugin{
      */
     function isValidParentType($a_parent_type)
     {
+        global $ilUser, $rbacreview;
+        if($roles = $rbacreview->getRolesByFilter(2, 0, 'VideoManagerTME')) {
+            foreach($roles as $role) {
+                if($rbacreview->isAssigned($ilUser->getId(), $role->getId())){
+                    return true;
+                }
+            }
+            return false;
+        }
         return true;
     }
 
