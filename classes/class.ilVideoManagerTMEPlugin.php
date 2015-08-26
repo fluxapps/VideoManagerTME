@@ -55,3 +55,4 @@ class ilVideoManagerTMEPlugin extends ilPageComponentPlugin{
     }
 
 } 
+
