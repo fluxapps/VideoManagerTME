@@ -29,7 +29,7 @@ class ilVideoManagerTMEPlugin extends ilPageComponentPlugin{
         global $ilUser, $rbacreview;
         if($roles = $rbacreview->getRolesByFilter(2, 0, 'VideoManagerTME')) {
             foreach($roles as $role) {
-                if($rbacreview->isAssigned($ilUser->getId(), $role->getId())){
+                if($rbacreview->isAssigned($ilUser->getId(), $role['rol_id'])){
                     return true;
                 }
             }
