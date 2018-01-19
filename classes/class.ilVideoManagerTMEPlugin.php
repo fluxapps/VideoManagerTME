@@ -41,17 +41,19 @@ class ilVideoManagerTMEPlugin extends ilPageComponentPlugin{
     /**
      * Get Javascript files
      */
-    function getJavascriptFiles()
+    function getJavascriptFiles($a_mode)
     {
 //        return array("js/pcexp.js");
+	    return array();
     }
 
     /**
      * Get css files
      */
-    function getCssFiles()
+    function getCssFiles($a_mode)
     {
 //        return array("css/pcexp.css");
+	    return array();
     }
 
 } 
