@@ -12,15 +12,32 @@ include_once("./Customizing/global/plugins/Services/UIComponent/UserInterfaceHoo
  */
 class ilVideoManagerTMEPluginGUI extends ilPageComponentPluginGUI {
 
-	public function executeCommand() {
-		global $ilCtrl;
+	/**
+	 * @var ilCtrl
+	 */
+	protected $ctrl;
+	/**
+	 * @var ilTemplate
+	 */
+	protected $tpl;
 
-		$next_class = $ilCtrl->getNextClass();
+	function __construct() {
+		parent::__construct();
+
+		global $DIC;
+
+		$this->ctrl = $DIC->ctrl();
+		$this->tpl = $DIC->ui()->mainTemplate();
+	}
+
+
+	public function executeCommand() {
+		$next_class = $this->ctrl->getNextClass();
 
 		switch ($next_class) {
 			default:
 				// perform valid commands
-				$cmd = $ilCtrl->getCmd();
+				$cmd = $this->ctrl->getCmd();
 				if (in_array($cmd, array( "create", "save", "edit", "edit2", "update", "cancel" ))) {
 					$this->$cmd();
 				}
@@ -30,17 +47,13 @@ class ilVideoManagerTMEPluginGUI extends ilPageComponentPluginGUI {
 
 
 	public function insert() {
-		global $tpl;
-
 		ilUtil::sendInfo($this->getPlugin()->txt('choose_video'), true);
 		$tree_explorer = new ilVideoManagerTreeExplorerGUI('tree_expl', $this, 'insert', new ilVideoManagerTree(1));
-		$tpl->setContent($tree_explorer->getHTML());
+		$this->tpl->setContent($tree_explorer->getHTML());
 	}
 
 
 	public function create() {
-		global $lng;
-
 		$video = new ilVideoManagerVideo($_GET['video_id']);
 
 		$video_properties = array(
@@ -53,36 +66,32 @@ class ilVideoManagerTMEPluginGUI extends ilPageComponentPluginGUI {
 		);
 
 		if ($this->createElement($video_properties)) {
-			ilUtil::sendSuccess($lng->txt("msg_obj_modified"), true);
+			ilUtil::sendSuccess($this->lng->txt("msg_obj_modified"), true);
 			$this->returnToParent();
 		}
 	}
 
 
 	public function edit() {
-		global $tpl;
-
 		$form = $this->initForm();
-		$tpl->setContent($form->getHTML());
+		$this->tpl->setContent($form->getHTML());
 	}
 
 
 	public function update() {
-		global $tpl, $lng;
-
 		$form = $this->initForm();
 		if ($form->checkInput()) {
 			$properties = $this->getProperties();
 			$properties['width'] = $form->getInput('width');
 			$properties['height'] = $form->getInput('height');
 			if ($this->updateElement($properties)) {
-				ilUtil::sendSuccess($lng->txt("msg_obj_modified"), true);
+				ilUtil::sendSuccess($this->lng->txt("msg_obj_modified"), true);
 				$this->returnToParent();
 			}
 		}
 
 		$form->setValuesByPost();
-		$tpl->setContent($form->getHtml());
+		$this->tpl->setContent($form->getHtml());
 	}
 
 
@@ -90,8 +99,6 @@ class ilVideoManagerTMEPluginGUI extends ilPageComponentPluginGUI {
 	 * @return ilPropertyFormGUI
 	 */
 	public function initForm() {
-		global $lng, $ilCtrl;
-
 		include_once("Services/Form/classes/class.ilPropertyFormGUI.php");
 		$form = new ilPropertyFormGUI();
 
@@ -114,11 +121,11 @@ class ilVideoManagerTMEPluginGUI extends ilPageComponentPluginGUI {
 		$width->setValue($prop["width"]);
 		$height->setValue($prop["height"]);
 
-		$form->addCommandButton("update", $lng->txt("save"));
-		$form->addCommandButton("cancel", $lng->txt("cancel"));
+		$form->addCommandButton("update", $this->lng->txt("save"));
+		$form->addCommandButton("cancel", $this->lng->txt("cancel"));
 		$form->setTitle($this->getPlugin()->txt("edit_ex_el"));
 
-		$form->setFormAction($ilCtrl->getFormAction($this));
+		$form->setFormAction($this->ctrl->getFormAction($this));
 
 		return $form;
 	}

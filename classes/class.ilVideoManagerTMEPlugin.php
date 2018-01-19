@@ -8,7 +8,26 @@ include_once("./Services/COPage/classes/class.ilPageComponentPlugin.php");
  */
 class ilVideoManagerTMEPlugin extends ilPageComponentPlugin{
 
-    /**
+	/**
+	 * @var ilRbacSystem
+	 */
+	protected $rbacreview;
+	/**
+	 * @var ilObjUser
+	 */
+	protected $user;
+
+	public function __construct() {
+		parent::__construct();
+
+		global $DIC;
+
+		$this->rbacreview = $DIC->rbac()->review();
+		$this->user = $DIC->user();
+	}
+
+
+	/**
      * Get plugin name
      *
      * @return string
@@ -26,10 +45,9 @@ class ilVideoManagerTMEPlugin extends ilPageComponentPlugin{
      */
     function isValidParentType($a_parent_type)
     {
-        global $ilUser, $rbacreview;
-        if($roles = $rbacreview->getRolesByFilter(2, 0, 'VideoManagerTME')) {
+        if($roles = $this->rbacreview->getRolesByFilter(2, 0, 'VideoManagerTME')) {
             foreach($roles as $role) {
-                if($rbacreview->isAssigned($ilUser->getId(), $role['rol_id'])){
+                if($this->rbacreview->isAssigned($this->user->getId(), $role['rol_id'])){
                     return true;
                 }
             }
