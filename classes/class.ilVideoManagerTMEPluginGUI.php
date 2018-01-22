@@ -12,6 +12,13 @@ include_once("./Customizing/global/plugins/Services/UIComponent/UserInterfaceHoo
  */
 class ilVideoManagerTMEPluginGUI extends ilPageComponentPluginGUI {
 
+	const CMD_CANCEL = 'cancel';
+	const CMD_CREATE = 'create';
+	const CMD_EDIT = 'edit';
+	const CMD_EDIT2 = 'edit2';
+	const CMD_INSERT = 'insert';
+	const CMD_SAVE = 'save';
+	const CMD_UPDATE = 'update';
 	/**
 	 * @var ilCtrl
 	 */
@@ -20,6 +27,7 @@ class ilVideoManagerTMEPluginGUI extends ilPageComponentPluginGUI {
 	 * @var ilTemplate
 	 */
 	protected $tpl;
+
 
 	function __construct() {
 		parent::__construct();
@@ -38,7 +46,7 @@ class ilVideoManagerTMEPluginGUI extends ilPageComponentPluginGUI {
 			default:
 				// perform valid commands
 				$cmd = $this->ctrl->getCmd();
-				if (in_array($cmd, array( "create", "save", "edit", "edit2", "update", "cancel" ))) {
+				if (in_array($cmd, array( self::CMD_CREATE, self::CMD_SAVE, self::CMD_EDIT, self::CMD_EDIT2, self::CMD_UPDATE, self::CMD_CANCEL ))) {
 					$this->$cmd();
 				}
 				break;
@@ -48,7 +56,7 @@ class ilVideoManagerTMEPluginGUI extends ilPageComponentPluginGUI {
 
 	public function insert() {
 		ilUtil::sendInfo($this->getPlugin()->txt('choose_video'), true);
-		$tree_explorer = new ilVideoManagerTreeExplorerGUI('tree_expl', $this, 'insert', new ilVideoManagerTree(1));
+		$tree_explorer = new ilVideoManagerTreeExplorerGUI('tree_expl', $this, self::CMD_INSERT, new ilVideoManagerTree(1));
 		$this->tpl->setContent($tree_explorer->getHTML());
 	}
 
@@ -121,8 +129,8 @@ class ilVideoManagerTMEPluginGUI extends ilPageComponentPluginGUI {
 		$width->setValue($prop["width"]);
 		$height->setValue($prop["height"]);
 
-		$form->addCommandButton("update", $this->lng->txt("save"));
-		$form->addCommandButton("cancel", $this->lng->txt("cancel"));
+		$form->addCommandButton(self::CMD_UPDATE, $this->lng->txt("save"));
+		$form->addCommandButton(self::CMD_CANCEL, $this->lng->txt("cancel"));
 		$form->setTitle($this->getPlugin()->txt("edit_ex_el"));
 
 		$form->setFormAction($this->ctrl->getFormAction($this));
