@@ -74,5 +74,9 @@ class ilVideoManagerTMEPlugin extends ilPageComponentPlugin{
 	    return array();
     }
 
+    protected function beforeUninstall() {
+	    // Nothing to delete
+	   return true;
+    }
 } 
 
