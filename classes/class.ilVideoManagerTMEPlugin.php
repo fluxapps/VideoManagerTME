@@ -6,8 +6,10 @@ include_once("./Services/COPage/classes/class.ilPageComponentPlugin.php");
  *
  * @author Theodor Truffer <tt@studer-raimann.ch>
  */
-class ilVideoManagerTMEPlugin extends ilPageComponentPlugin{
+class ilVideoManagerTMEPlugin extends ilPageComponentPlugin {
 
+	const PLUGIN_NAME = 'VideoManagerTME';
+	const PLUGIN_ID = 'vidm_tme';
 	/**
 	 * @var ilRbacSystem
 	 */
@@ -16,6 +18,7 @@ class ilVideoManagerTMEPlugin extends ilPageComponentPlugin{
 	 * @var ilObjUser
 	 */
 	protected $user;
+
 
 	public function __construct() {
 		parent::__construct();
@@ -28,55 +31,56 @@ class ilVideoManagerTMEPlugin extends ilPageComponentPlugin{
 
 
 	/**
-     * Get plugin name
-     *
-     * @return string
-     */
-    function getPluginName()
-    {
-        return "VideoManagerTME";
-    }
+	 * Get plugin name
+	 *
+	 * @return string
+	 */
+	function getPluginName() {
+		return self::PLUGIN_NAME;
+	}
 
 
-    /**
-     * Get plugin name
-     *
-     * @return string
-     */
-    function isValidParentType($a_parent_type)
-    {
-        if($roles = $this->rbacreview->getRolesByFilter(2, 0, 'VideoManagerTME')) {
-            foreach($roles as $role) {
-                if($this->rbacreview->isAssigned($this->user->getId(), $role['rol_id'])){
-                    return true;
-                }
-            }
-            return false;
-        }
-        return true;
-    }
+	/**
+	 * Get plugin name
+	 *
+	 * @return string
+	 */
+	function isValidParentType($a_parent_type) {
+		if ($roles = $this->rbacreview->getRolesByFilter(2, 0, self::PLUGIN_NAME)) {
+			foreach ($roles as $role) {
+				if ($this->rbacreview->isAssigned($this->user->getId(), $role['rol_id'])) {
+					return true;
+				}
+			}
 
-    /**
-     * Get Javascript files
-     */
-    function getJavascriptFiles($a_mode)
-    {
-//        return array("js/pcexp.js");
-	    return array();
-    }
+			return false;
+		}
 
-    /**
-     * Get css files
-     */
-    function getCssFiles($a_mode)
-    {
-//        return array("css/pcexp.css");
-	    return array();
-    }
+		return true;
+	}
 
-    protected function beforeUninstall() {
-	    // Nothing to delete
-	   return true;
-    }
+
+	/**
+	 * Get Javascript files
+	 */
+	function getJavascriptFiles($a_mode) {
+		//        return array("js/pcexp.js");
+		return array();
+	}
+
+
+	/**
+	 * Get css files
+	 */
+	function getCssFiles($a_mode) {
+		//        return array("css/pcexp.css");
+		return array();
+	}
+
+
+	protected function beforeUninstall() {
+		// Nothing to delete
+		return true;
+	}
 } 
 
